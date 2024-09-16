@@ -9,7 +9,7 @@ fi
 CONTROLLER_IP=$1
 
 # Update package index
-sudo apt-get update
+sudo apt-get update -y
 
 # Install Java 8
 sudo apt-get install -y openjdk-8-jdk
@@ -29,7 +29,7 @@ wget https://nexus.opendaylight.org/content/groups/public/org/opendaylight/integ
 sudo apt-get install -y unzip
 
 # Unzip the downloaded Karaf distribution
-unzip distribution-karaf-0.5.0-Boron.zip
+    unzip distribution-karaf-0.5.0-Boron.zip
 
 # Change directory to the Karaf distribution
 cd distribution-karaf-0.5.0-Boron
@@ -52,3 +52,16 @@ sudo mn --topo linear,2 --mac --controller=remote,ip=$CONTROLLER_IP,port=6633 --
 # Run pingall to test connectivity
 sudo mn -c
 sudo mn --topo linear,2 --mac --controller=remote,ip=$CONTROLLER_IP,port=6633 --switch ovs,protocols=OpenFlow10 --test pingall
+
+
+
+sudo apt-get update
+sudo apt-get install python3-venv
+
+python3 -m venv venv
+
+source venv/bin/activate
+pip install requests networkx matplotlib
+
+python3 sdn_basic.py
+python3 sdn_visual.py
