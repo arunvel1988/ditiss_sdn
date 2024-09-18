@@ -1,0 +1,60 @@
+# Create a bridge named 'br0'
+ovs-vsctl add-br br0
+
+# Add a port named 'eth0' to the bridge
+ovs-vsctl add-port br0 eth0
+
+# Set an OpenFlow controller for the bridge
+ovs-vsctl set-controller br0 tcp:192.168.1.100:6633
+
+# Show detailed configuration
+ovs-vsctl show
+
+
+ovs-vsctl del-br <bridge-name>
+
+
+ovs-vsctl list-br
+
+
+ovs-vsctl add-port <bridge-name> <port-name>
+
+
+ovs-vsctl del-port <bridge-name> <port-name>
+
+
+ovs-vsctl set interface <interface-name> <key>=<value>
+
+ovs-vsctl list interface
+
+ovs-vsctl list interface <interface-name>
+
+
+ovs-vsctl list-ports <bridge-name>
+
+
+ovs-vsctl list port <port-name>
+
+
+ovs-vsctl get-controller <bridge-name>
+
+
+ovs-vsctl show
+
+
+ovs-vsctl del-manager
+
+
+ovsdb-client list-dbs
+
+ovsdb-client list-tables <database>
+
+
+ovsdb-client list-columns <database> <table>
+
+
+ovsdb-client monitor <database> <table>
+
+ovsdb-client monitor <database> <table> -sync
+
+
