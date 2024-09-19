@@ -36,6 +36,9 @@ sh ovs-ofctl add-flow s1 "in_port=1,actions=drop"
 
 sh ovs-ofctl add-flow s1 "in_port=1,actions=output:2"
 
+sh ovs-ofctl add-flow s1 "in_port=s1-eth1,actions=output:s1-eth2"
+
+
 sh ovs-ofctl del-flows s1 "in_port=1"
 
 h1 python3 -m http.server 80 &
