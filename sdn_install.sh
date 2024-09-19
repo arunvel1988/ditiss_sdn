@@ -97,6 +97,23 @@ sh ovs-ofctl add-flow s1 "priority=1000,in_port=3,actions=output:1,output:2,outp
 sh ovs-ofctl add-flow s1 "priority=1000,in_port=4,actions=output:1,output:2,output:3,output:5"
 sh ovs-ofctl add-flow s1 "priority=1000,in_port=5,actions=output:1,output:2,output:3,output:4"
 
+
+
+sh ovs-ofctl add-flow s1 "priority=1000,in_port=1,dl_type=0x0800,nw_proto=6,tp_dst=80,actions=output:5"
+sh ovs-ofctl add-flow s1 "priority=900,in_port=2,dl_type=0x0800,nw_proto=6,tp_dst=80,actions=drop"
+sh ovs-ofctl add-flow s1 "priority=900,in_port=3,dl_type=0x0800,nw_proto=6,tp_dst=80,actions=drop"
+sh ovs-ofctl add-flow s1 "priority=900,in_port=4,dl_type=0x0800,nw_proto=6,tp_dst=80,actions=drop"
+sh ovs-ofctl add-flow s1 "priority=900,in_port=5,dl_type=0x0800,nw_proto=6,tp_dst=80,actions=drop"
+
+
+sh ovs-ofctl add-flow s1 "priority=800,in_port=1,actions=output:2,output:3,output:4,output:5"
+sh ovs-ofctl add-flow s1 "priority=800,in_port=2,actions=output:1,output:3,output:4,output:5"
+sh ovs-ofctl add-flow s1 "priority=800,in_port=3,actions=output:1,output:2,output:4,output:5"
+sh ovs-ofctl add-flow s1 "priority=800,in_port=4,actions=output:1,output:2,output:3,output:5"
+sh ovs-ofctl add-flow s1 "priority=800,in_port=5,actions=output:1,output:2,output:3,output:4"
+
+
+
 sh ovs-ofctl del-flows s1 "in_port=s1-eth1"
 
 
