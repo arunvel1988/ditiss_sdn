@@ -37,6 +37,73 @@ cd distribution-karaf-0.5.0-Boron
 # Start Karaf
 ./bin/karaf &
 
+
+
+# Single switch topology with 3 hosts
+sudo mn --topo single,3 --mac --switch ovsk --controller=default
+
+# Linear topology with 3 switches
+sudo mn --topo linear,3 --mac --switch ovsk --controller=default
+
+# Tree topology with depth 2 and fanout 2
+sudo mn --topo tree,depth=2,fanout=2 --mac --switch ovsk --controller=default
+
+
+
+sudo apt install -y openvswitch-testcontroller
+
+
+nodes
+
+net
+
+pingall
+
+h1 ping h2
+
+h1 ifconfig
+
+h1
+
+dump
+
+link h1 s1 up
+
+h1 route
+
+sh ovs-ofctl dump-flows s1
+
+sh ovs-ofctl add-flow s1 "in_port=1,actions=drop"
+
+sh ovs-ofctl add-flow s1 "in_port=1,actions=output:2"
+
+sh ovs-ofctl add-flow s1 "in_port=s1-eth1,actions=output:s1-eth2"
+
+sh ovs-ofctl del-flows s1 "in_port=1"
+
+h1 python3 -m http.server 80 &
+
+h2 wget -O - h1
+
+h1 arp -n
+
+h1 route -n
+
+sh ovs-ofctl del-flows s1 "in_port=1"
+
+sh ovs-ofctl add-flow s1 "priority=1000,in_port=1,actions=output:2,output:3,output:4,output:5"
+sh ovs-ofctl add-flow s1 "priority=1000,in_port=2,actions=output:1,output:3,output:4,output:5"
+sh ovs-ofctl add-flow s1 "priority=1000,in_port=3,actions=output:1,output:2,output:4,output:5"
+sh ovs-ofctl add-flow s1 "priority=1000,in_port=4,actions=output:1,output:2,output:3,output:5"
+sh ovs-ofctl add-flow s1 "priority=1000,in_port=5,actions=output:1,output:2,output:3,output:4"
+
+sh ovs-ofctl del-flows s1 "in_port=s1-eth1"
+
+
+sh ovs-ofctl del-flows s1 "actions=drop"
+
+
+h1 ping -c 4 h2
 # Wait for Karaf to start
 sleep 60
 
