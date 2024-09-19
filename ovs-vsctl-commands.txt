@@ -1,11 +1,32 @@
 # Create a bridge named 'br0'
-ovs-vsctl add-br br0
+ovs-vsctl add-br cdac
 
 # Add a port named 'eth0' to the bridge
-ovs-vsctl add-port br0 eth0
+ovs-vsctl add-port cdac eth0
 
 # Set an OpenFlow controller for the bridge
-ovs-vsctl set-controller br0 tcp:192.168.1.100:6633
+sudo ovs-vsctl set-controller cdac tcp:192.168.0.105:6633
+
+sudo ovs-vsctl set-controller cdac tcp:localhost:6633
+
+sudo ovs-vsctl set Bridge cdac protocols=OpenFlow13
+
+
+
+sudo ovs-vsctl set Bridge cdac protocols=OpenFlow13
+
+
+sudo ovs-ofctl -O OpenFlow13 dump-flows cdac
+
+
+
+sudo ovs-vsctl set-controller cdac tcp:192.168.1.100:6633
+
+
+sudo ovs-vsctl set Bridge cdac protocols=OpenFlow13
+sudo ovs-vsctl set-controller cdac tcp:127.0.0.1:6633
+
+
 
 # Show detailed configuration
 ovs-vsctl show
