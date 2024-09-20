@@ -1,0 +1,163 @@
+#!/bin/bash
+
+# Check if the controller IP is provided
+if [ -z "$1" ]; then
+  echo "Usage: $0 <controller-ip>"
+  exit 1
+fi
+
+CONTROLLER_IP=$1
+
+# Update package index
+sudo apt-get update -y
+
+# Install Java 8
+sudo apt-get install -y openjdk-8-jdk
+
+# Set JAVA_HOME environment variable
+echo "export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64" >> ~/.bashrc
+echo "export PATH=\$JAVA_HOME/bin:\$PATH" >> ~/.bashrc
+source ~/.bashrc
+
+# Verify Java version
+java -version
+
+# Download OpenDaylight Karaf distribution
+wget https://nexus.opendaylight.org/content/groups/public/org/opendaylight/integration/distribution-karaf/0.5.0-Boron/distribution-karaf-0.5.0-Boron.zip
+
+# Install unzip if not already installed
+sudo apt-get install -y unzip
+
+# Unzip the downloaded Karaf distribution
+    unzip distribution-karaf-0.5.0-Boron.zip
+
+# Change directory to the Karaf distribution
+cd distribution-karaf-0.5.0-Boron
+
+# Start Karaf
+./bin/karaf &
+
+
+
+# Single switch topology with 3 hosts
+sudo mn --topo single,3 --mac --switch ovsk --controller=default
+
+# Linear topology with 3 switches
+sudo mn --topo linear,3 --mac --switch ovsk --controller=default
+
+# Tree topology with depth 2 and fanout 2
+sudo mn --topo tree,depth=2,fanout=2 --mac --switch ovsk --controller=default
+
+
+
+sudo apt install -y openvswitch-testcontroller
+
+
+nodes
+
+net
+
+pingall
+
+h1 ping h2
+
+h1 ifconfig
+
+h1
+
+dump
+
+link h1 s1 up
+
+h1 route
+
+sh ovs-ofctl dump-flows s1
+
+sh ovs-ofctl add-flow s1 "in_port=1,actions=drop"
+
+sh ovs-ofctl add-flow s1 "in_port=1,actions=output:2"
+
+sh ovs-ofctl add-flow s1 "in_port=s1-eth1,actions=output:s1-eth2"
+
+sh ovs-ofctl del-flows s1 "in_port=1"
+
+h1 python3 -m http.server 80 &
+
+h2 wget -O - h1
+
+h1 arp -n
+
+h1 route -n
+
+sh ovs-ofctl del-flows s1 "in_port=1"
+
+sh ovs-ofctl add-flow s1 "priority=1000,in_port=1,actions=output:2,output:3,output:4,output:5"
+sh ovs-ofctl add-flow s1 "priority=1000,in_port=2,actions=output:1,output:3,output:4,output:5"
+sh ovs-ofctl add-flow s1 "priority=1000,in_port=3,actions=output:1,output:2,output:4,output:5"
+sh ovs-ofctl add-flow s1 "priority=1000,in_port=4,actions=output:1,output:2,output:3,output:5"
+sh ovs-ofctl add-flow s1 "priority=1000,in_port=5,actions=output:1,output:2,output:3,output:4"
+
+
+
+sh ovs-ofctl add-flow s1 "priority=1000,in_port=1,dl_type=0x0800,nw_proto=6,tp_dst=80,actions=output:5"
+sh ovs-ofctl add-flow s1 "priority=900,in_port=2,dl_type=0x0800,nw_proto=6,tp_dst=80,actions=drop"
+sh ovs-ofctl add-flow s1 "priority=900,in_port=3,dl_type=0x0800,nw_proto=6,tp_dst=80,actions=drop"
+sh ovs-ofctl add-flow s1 "priority=900,in_port=4,dl_type=0x0800,nw_proto=6,tp_dst=80,actions=drop"
+sh ovs-ofctl add-flow s1 "priority=900,in_port=5,dl_type=0x0800,nw_proto=6,tp_dst=80,actions=drop"
+
+
+sh ovs-ofctl add-flow s1 "priority=800,in_port=1,actions=output:2,output:3,output:4,output:5"
+sh ovs-ofctl add-flow s1 "priority=800,in_port=2,actions=output:1,output:3,output:4,output:5"
+sh ovs-ofctl add-flow s1 "priority=800,in_port=3,actions=output:1,output:2,output:4,output:5"
+sh ovs-ofctl add-flow s1 "priority=800,in_port=4,actions=output:1,output:2,output:3,output:5"
+sh ovs-ofctl add-flow s1 "priority=800,in_port=5,actions=output:1,output:2,output:3,output:4"
+
+
+lxc
+sudo ovs-ofctl -O OpenFlow13 dump-flows cdac10
+sudo ovs-vsctl list-ports cdac10
+sudo ovs-ofctl -O OpenFlow13 show cdac10
+sudo ovs-ofctl -O OpenFlow13 add-flow cdac10 priority=200,in_port=1,actions=output:2
+sudo ovs-ofctl -O OpenFlow13 add-flow cdac10 priority=200,in_port=2,actions=output:1
+
+delete
+sudo ovs-ofctl -O OpenFlow13 del-flows cdac10 "in_port=1,actions=output:2"
+
+
+
+
+sh ovs-ofctl del-flows s1 "in_port=s1-eth1"
+
+
+sh ovs-ofctl del-flows s1 "actions=drop"
+
+
+h1 ping -c 4 h2
+# Wait for Karaf to start
+sleep 60
+
+# Install necessary OpenDaylight features
+./bin/client feature:install odl-restconf odl-l2switch-switch odl-mdsal-apidocs odl-dlux-all
+
+# Install Mininet if not already installed
+sudo apt-get install -y mininet
+
+# Run Mininet with a linear topology of 2 switches
+sudo mn --topo linear,2 --mac --controller=remote,ip=$CONTROLLER_IP,port=6633 --switch ovs,protocols=OpenFlow10
+
+# Run pingall to test connectivity
+sudo mn -c
+sudo mn --topo linear,2 --mac --controller=remote,ip=$CONTROLLER_IP,port=6633 --switch ovs,protocols=OpenFlow10 --test pingall
+
+
+
+sudo apt-get update
+sudo apt-get install python3-venv
+
+python3 -m venv venv
+
+source venv/bin/activate
+pip install requests networkx matplotlib
+
+python3 sdn_basic.py
+python3 sdn_visual.py
