@@ -78,4 +78,3 @@ ovsdb-client monitor <database> <table>
 
 ovsdb-client monitor <database> <table> -sync
 
-
