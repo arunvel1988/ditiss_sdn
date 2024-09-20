@@ -121,8 +121,8 @@ sudo ovs-ofctl -O OpenFlow13 add-flow cdac10 priority=200,in_port=1,actions=outp
 sudo ovs-ofctl -O OpenFlow13 add-flow cdac10 priority=200,in_port=2,actions=output:1
 
 delete
-sudo ovs-ofctl -O OpenFlow13 del-flows cdac10 "in_port=1,actions=output:2"
-
+sudo ovs-ofctl -O OpenFlow13 del-flows cdac10 "in_port=1"
+sudo ovs-ofctl -O OpenFlow13 del-flows cdac10 "in_port=2"
 
 
 
