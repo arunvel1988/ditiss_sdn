@@ -1,0 +1,98 @@
+
+- **Inside (LAN):** `10.0.0.0/24` (Security-Level: `100`)  
+- **DMZ:** `192.168.1.0/24` (Security-Level: `50`)  
+- **Outside (Internet):** `20.0.0.0/24` (Security-Level: `0`)  
+- **Default Gateway:** `20.0.0.2` (Router connected to 8.8.8.8)  
+ 
+
+
+
+---
+
+Configure Interfaces**
+```bash
+conf t
+! Inside Interface
+interface GigabitEthernet1/1
+ nameif inside
+ security-level 100
+ ip address 10.0.0.1 255.255.255.0
+ no shutdown
+
+! DMZ Interface
+interface GigabitEthernet1/2
+ nameif dmz
+ security-level 50
+ ip address 192.168.1.1 255.255.255.0
+ no shutdown
+
+! Outside Interface
+interface GigabitEthernet1/3
+ nameif outside
+ security-level 0
+ ip address 20.0.0.1 255.255.255.0
+ no shutdown
+
+write memory
+```
+
+---
+Configure Static Route**
+```bash
+conf t
+route outside 0.0.0.0 0.0.0.0 20.0.0.2
+write memory
+```
+
+---
+Enable NAT (Inside → Outside)**
+```bash
+conf t
+object network INSIDE-NET
+ subnet 10.0.0.0 255.255.255.0
+ nat (inside,outside) dynamic interface
+write memory
+```
+
+---
+Configure Access Control Lists (ACLs)**
+```bash
+conf t
+! Allow Inside to go Anywhere
+access-list INSIDE extended permit ip any any
+access-group INSIDE in interface inside
+
+! Allow ICMP Replies from Outside
+access-list OUTSIDE extended permit icmp any any echo-reply
+access-list OUTSIDE extended permit icmp any any unreachable
+access-group OUTSIDE in interface outside
+
+! Allow HTTP (Port 80) to 8.8.8.8
+access-list INSIDE extended permit tcp any host 8.8.8.8 eq www
+write memory
+```
+
+---
+Enable Inspection for ICMP & Other Protocols**
+```bash
+conf t
+policy-map global_policy
+ class inspection_default
+  inspect dns preset_dns_map
+  inspect ftp
+  inspect icmp
+  inspect tftp
+write memory
+```
+
+---
+Verify Configuration & Connectivity**
+```bash
+show xlate
+show access-list
+show route
+show conn
+show logging
+ping 8.8.8.8
+```
+
