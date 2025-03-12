@@ -95,4 +95,9 @@ show conn
 show logging
 ping 8.8.8.8
 ```
+conf t
+access-list OUTSIDE extended permit icmp any any
+access-list OUTSIDE extended permit tcp any any established
+access-group OUTSIDE in interface outside
+write memory
 
