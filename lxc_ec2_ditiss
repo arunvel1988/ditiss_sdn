@@ -10,6 +10,42 @@ sudo ovs-vsctl show
 sudo lxc-create -t download -n inst21 -- -d alpine -r 3.21 -a amd64
 sudo lxc-create -t download -n inst22 -- -d alpine -r 3.21 -a amd64
 
+sudo lxc-start -n inst21
+sudo lxc-start -n inst22
+
+
+sudo lxc-ls --fancy
+
+
+sudo ip link set cdac up
+
+
+sudo ip link add inst21-veth0 type veth peer name inst21-br
+sudo ip link add inst22-veth0 type veth peer name inst22-br
+
+
+sudo ovs-vsctl add-port cdac inst21-br
+sudo ovs-vsctl add-port cdac inst22-br
+
+
+sudo ip link set inst21-veth0 netns $(sudo lxc-info -n inst21 | grep PID | awk '{print $2}')
+sudo ip link set inst22-veth0 netns $(sudo lxc-info -n inst22 | grep PID | awk '{print $2}')
+
+sudo ip link set inst21-veth0 up
+sudo ip link set inst22-veth0 up
+
+sudo lxc-attach -n inst21 -- ip link set inst21-veth0 up
+sudo lxc-attach -n inst21 -- ip addr add 192.168.100.1/24 dev inst21-veth0
+
+
+sudo lxc-attach -n inst22 -- ip link set inst22-veth0 up
+sudo lxc-attach -n inst22 -- ip addr add 192.168.100.2/24 dev inst22-veth0
+
+
+sudo ip link set inst21-veth0 up
+sudo ip link set inst22-veth0 up
+
+
 
 
 
