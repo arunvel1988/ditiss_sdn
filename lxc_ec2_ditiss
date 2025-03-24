@@ -45,6 +45,15 @@ sudo lxc-attach -n inst22 -- ip addr add 192.168.100.2/24 dev inst22-veth0
 sudo ip link set inst21-veth0 up
 sudo ip link set inst22-veth0 up
 
+sudo ip link set inst211-br up
+sudo ip link set inst221-br up
+
+sudo lxc-attach -n inst21 -- ping -c 4 192.168.100.2
+
+sudo lxc-attach -n inst22 -- ping -c 4 192.168.100.1
+
+
+
 
 
 
