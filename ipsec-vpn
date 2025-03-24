@@ -1,15 +1,10 @@
+
+
+################################## R1 ##############################################
 license boot module c1900 technology-package securityk9
 copy run start 
 reload 
-
-
 access-list 100 permit ip 192.168.10.0 0.0.0.255 192.168.20.0 0.0.0.255
-
-
-
-access-list 100 permit ip 192.168.20.0 0.0.0.255 192.168.10.0 0.0.0.255
-
-
 crypto isakmp policy 10
   encryption aes 256
   authentication pre-share
@@ -17,19 +12,7 @@ crypto isakmp policy 10
 
 crypto isakmp key secret123 address 20.0.0.1
 
-
-crypto isakmp policy 10
-  encryption aes 256
-  authentication pre-share
-  group 5
-
-crypto isakmp key secret123 address 10.0.0.1
-
-
 crypto ipsec transform-set pune->mumbai esp-aes 256 esp-sha-hmac
-
-
-crypto ipsec transform-set mumbai->pune esp-aes 256 esp-sha-hmac
 
 
 crypto map VPN-MAP 10 ipsec-isakmp
@@ -42,6 +25,18 @@ crypto map VPN-MAP 10 ipsec-isakmp
 int g0/0
 crypto map VPN-MAP
 
+#######################################################################################
+################################## R3 ##############################################
+access-list 100 permit ip 192.168.20.0 0.0.0.255 192.168.10.0 0.0.0.255
+crypto isakmp policy 10
+  encryption aes 256
+  authentication pre-share
+  group 5
+
+crypto isakmp key secret123 address 10.0.0.1
+
+crypto ipsec transform-set mumbai->pune esp-aes 256 esp-sha-hmac
+
 
 crypto map VPN-MAP 10 ipsec-isakmp
   set peer 10.0.0.1
@@ -52,3 +47,5 @@ crypto map VPN-MAP 10 ipsec-isakmp
 
 int g0/0
 crypto map VPN-MAP
+
+#######################################################################################
