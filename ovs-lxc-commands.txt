@@ -5,8 +5,8 @@ sudo apt install -y openvswitch-switch openvswitch-common
 ip addr
 sudo ovs-vsctl add-br cdac
 sudo apt install -y lxc lxc-templates
-sudo lxc-create -t download -n inst21 -- -d alpine -r 3.17 -a amd64
-sudo lxc-create -t download -n inst22 -- -d alpine -r 3.17 -a amd64
+sudo lxc-create -t download -n inst21 -- -d alpine -r 3.21 -a amd64
+sudo lxc-create -t download -n inst22 -- -d alpine -r 3.21 -a amd64
  
 sudo lxc-start -n inst21
  
