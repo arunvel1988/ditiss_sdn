@@ -149,6 +149,7 @@ sudo mn --topo linear,2 --mac --controller=remote,ip=$CONTROLLER_IP,port=6633 --
 sudo mn -c
 sudo mn --topo linear,2 --mac --controller=remote,ip=$CONTROLLER_IP,port=6633 --switch ovs,protocols=OpenFlow10 --test pingall
 
+sudo mn --topo tree,depth=2,fanout=3 --mac --controller=remote,ip=13.201.79.70,port=6633 --switch ovs,protocols=OpenFlow10 --test pingall
 
 
 sudo apt-get update
