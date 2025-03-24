@@ -13,7 +13,7 @@ sudo apt-get update -y
 
 # Install Java 8
 sudo apt-get install -y openjdk-8-jdk
-
+sudo apt-get install mininet -y
 # Set JAVA_HOME environment variable
 echo "export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64" >> ~/.bashrc
 echo "export PATH=\$JAVA_HOME/bin:\$PATH" >> ~/.bashrc
