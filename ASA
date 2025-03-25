@@ -87,7 +87,24 @@ access-list OUTSIDE extended permit tcp host 8.8.8.8 eq www any
 
 write memory
 
-##############################TCP 80 ########################################################
+######################################################################################
+
+
+
+
+
+############################## OUTSIDE TO DMZ ########################################################
+
+! Allow HTTP (Port 80) to192.168.10.2
+access-list OUTSIDE extended permit tcp any host 192.168.10.2 eq www
+access-group OUTSIDE in interface outside
+
+access-list DMZ extended permit tcp host 192.168.10.2 eq www any
+#access-group DMZ in interface dmz
+
+write memory
+
+######################################################################################
 ```
 
 ---
