@@ -82,8 +82,8 @@ access-group OUTSIDE in interface outside
 access-list INSIDE extended permit tcp any host 8.8.8.8 eq www
 access-group INSIDE in interface inside
 
-access-list OUTSIDE extended permit tcp any any established
-access-group OUTSIDE in interface outside
+access-list OUTSIDE extended permit tcp host 8.8.8.8 eq www any
+#access-group OUTSIDE in interface outside
 
 write memory
 
