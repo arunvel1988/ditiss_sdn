@@ -59,6 +59,15 @@ Configure Access Control Lists (ACLs)**
 ```bash
 conf t
 ! Allow Inside to go Anywhere
+
+########### ICMP ONLY ###################################################################################################
+access-list INSIDE extended permit icmp any any
+access-group INSIDE in interface inside
+
+access-list OUTSIDE extended permit icmp any any
+access-group OUTSIDE in interface outside
+
+#########################################################################################################################
 access-list INSIDE extended permit ip any any
 access-group INSIDE in interface inside
 
@@ -98,6 +107,6 @@ ping 8.8.8.8
 conf t
 access-list OUTSIDE extended permit icmp any any
 access-list OUTSIDE extended permit tcp any any established
-access-group OUTSIDE in interface outside
+ access-group OUTSIDE in interface outside
 write memory
 
