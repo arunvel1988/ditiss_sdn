@@ -76,9 +76,18 @@ access-list OUTSIDE extended permit icmp any any echo-reply
 access-list OUTSIDE extended permit icmp any any unreachable
 access-group OUTSIDE in interface outside
 
+##############################TCP 80 ########################################################
+
 ! Allow HTTP (Port 80) to 8.8.8.8
 access-list INSIDE extended permit tcp any host 8.8.8.8 eq www
+access-group INSIDE in interface inside
+
+access-list OUTSIDE extended permit tcp any any established
+access-group OUTSIDE in interface outside
+
 write memory
+
+##############################TCP 80 ########################################################
 ```
 
 ---
