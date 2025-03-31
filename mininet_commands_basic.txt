@@ -51,6 +51,31 @@ h1 route -n
 
 h1 ping -c 4 h2
 
+
+
+curl -u admin:admin -H "Content-Type: application/json" -X PUT \
+--data @port_block.json \
+http://<ODL_IP>:8181/restconf/config/opendaylight-inventory:nodes/node/openflow:1/table/0/flow/1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #########################################################################
 # vlan
 #########################################################################
