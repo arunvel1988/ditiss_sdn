@@ -6,7 +6,7 @@ username = "admin"
 password = "admin"
 
 # Read XML content from file
-with open("port.xml", "r") as file:
+with open("flow.xml", "r") as file:
     netconf_payload = file.read()
 
 # Connect to OpenDaylight via NETCONF
