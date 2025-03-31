@@ -1,0 +1,27 @@
+<rpc xmlns="urn:ietf:params:xml:ns:netconf:base:1.0" message-id="101">
+  <edit-config>
+    <target>
+      <running/>
+    </target>
+    <config>
+      <flow xmlns="urn:opendaylight:flow:inventory">
+        <table_id>0</table_id>
+        <id>1</id>
+        <match>
+          <in-port>1</in-port>
+        </match>
+        <instructions>
+          <instruction>
+            <order>0</order>
+            <apply-actions>
+              <action>
+                <order>0</order>
+                <drop-action/>
+              </action>
+            </apply-actions>
+          </instruction>
+        </instructions>
+      </flow>
+    </config>
+  </edit-config>
+</rpc>
