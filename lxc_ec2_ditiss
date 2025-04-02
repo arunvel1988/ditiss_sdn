@@ -44,3 +44,20 @@ sudo lxc-attach -n container2 -- ping -c 4 192.168.200.1
 
 sudo ovs-vsctl show
 
+
+
+
+################################################################################
+
+ip route | grep default
+
+sudo iptables -t nat -A POSTROUTING -s 192.168.200.0/24 -o eth0 -j MASQUERADE
+
+sudo iptables -A FORWARD -i mybridge -j ACCEPT
+sudo iptables -A FORWARD -o mybridge -j ACCEPT
+sudo apt install -y iptables-persistent
+
+
+
+
+
