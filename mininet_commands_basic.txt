@@ -1,3 +1,5 @@
+
+sudo apt install -y openvswitch-testcontroller
 # Single switch topology with 3 hosts
 sudo mn --topo single,3 --mac --switch ovsk --controller=default
 
@@ -35,6 +37,25 @@ sh ovs-ofctl dump-flows s1
 sh ovs-ofctl add-flow s1 "in_port=1,actions=drop"
 
 sh ovs-ofctl add-flow s1 "in_port=1,actions=output:2"
+
+
+
+#################################################################################
+
+
+sh ovs-ofctl add-flow s1 "in_port=2,actions=output:1"
+sh ovs-ofctl add-flow s1 "in_port=1,actions=output:3"
+sh ovs-ofctl add-flow s1 "in_port=3,actions=output:1"
+sh ovs-ofctl add-flow s1 "in_port=2,actions=output:3"
+sh ovs-ofctl add-flow s1 "in_port=3,actions=output:2"
+
+#################################################################################
+
+sh ovs-ofctl add-flow s1 "in_port=1,actions=normal"
+sh ovs-ofctl add-flow s1 "in_port=2,actions=normal"
+sh ovs-ofctl add-flow s1 "in_port=3,actions=normal"
+
+#################################################################################
 
 sh ovs-ofctl add-flow s1 "in_port=s1-eth1,actions=output:s1-eth2"
 
