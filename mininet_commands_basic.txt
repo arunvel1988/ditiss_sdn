@@ -34,6 +34,8 @@ h1 route
 
 sh ovs-ofctl dump-flows s1
 
+sh ovs-ofctl del-flows s1
+
 sh ovs-ofctl add-flow s1 "in_port=1,actions=drop"
 
 sh ovs-ofctl add-flow s1 "in_port=1,actions=output:2"
