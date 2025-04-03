@@ -1,6 +1,5 @@
 #!/bin/bash
-
-# Check if the controller IP is provided
+http://13.201.123.107:8181/index.html#/topology# Check if the controller IP is provided
 if [ -z "$1" ]; then
   echo "Usage: $0 <controller-ip>"
   exit 1
