@@ -34,7 +34,19 @@ h1 route
 
 sh ovs-ofctl dump-flows s1
 
-sh ovs-ofctl del-flows s1
+
+sh ovs-ofctl del-flows s1  # Clear existing flows
+
+# Allow HTTP traffic (TCP port 80) from h1 to h3
+sh ovs-ofctl add-flow s1 "in_port=1,dl_type=0x0800,nw_proto=6,tp_dst=80,actions=output:3"
+
+# Drop all other traffic from h1 to h3
+sh ovs-ofctl add-flow s1 "in_port=1,actions=drop"
+
+h3 python3 -m http.server 80
+
+
+h1 wget -O - h3
 
 sh ovs-ofctl add-flow s1 "in_port=1,actions=drop"
 
