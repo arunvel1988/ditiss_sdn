@@ -1,0 +1,71 @@
+sudo apt update -y
+sudo apt install -y openvswitch-switch openvswitch-common lxc lxc-templates iptables-persistent
+
+
+sudo ovs-vsctl add-br cdac
+
+
+sudo lxc-create -t download -n inst21 -- -d alpine -r 3.21 -a amd64
+sudo lxc-create -t download -n inst22 -- -d alpine -r 3.21 -a amd64
+
+
+sudo nano /var/lib/lxc/inst21/config
+
+lxc.net.0.type = veth
+lxc.net.0.link = cdac
+lxc.net.0.flags = up
+lxc.net.0.hwaddr = 00:16:3e:00:00:01
+lxc.net.0.name = eth0
+
+
+sudo nano /var/lib/lxc/inst22/config
+
+
+lxc.net.0.type = veth
+lxc.net.0.link = cdac
+lxc.net.0.flags = up
+lxc.net.0.hwaddr = 00:16:3e:00:00:02
+lxc.net.0.name = eth0
+
+
+sudo lxc-stop -n inst21
+sudo lxc-stop -n inst22
+
+sudo lxc-start -n inst21
+sudo lxc-start -n inst22
+
+
+sudo lxc-attach -n inst21
+ip addr add 192.168.1.2/24 dev eth0
+ip link set eth0 up
+ip route add default via 192.168.1.1
+echo "nameserver 8.8.8.8" > /etc/resolv.conf
+exit
+
+
+sudo lxc-attach -n inst22
+ip addr add 192.168.1.3/24 dev eth0
+ip link set eth0 up
+ip route add default via 192.168.1.1
+echo "nameserver 8.8.8.8" > /etc/resolv.conf
+exit
+
+
+echo "net.ipv4.ip_forward=1" | sudo tee -a /etc/sysctl.conf
+sudo sysctl -p
+
+
+sudo iptables -t nat -A POSTROUTING -s 192.168.1.0/24 -o eth0 -j MASQUERADE
+sudo iptables -A FORWARD -i eth0 -o cdac -m state --state RELATED,ESTABLISHED -j ACCEPT
+sudo iptables -A FORWARD -i cdac -o eth0 -j ACCEPT
+
+
+sudo netfilter-persistent save
+
+
+sudo lxc-attach -n inst21
+ping 8.8.8.8
+ping google.com
+exit
+
+
